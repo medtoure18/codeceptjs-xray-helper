@@ -34,23 +34,23 @@ Example:
 
 ##### To use this plugin you need to provide the following infos:
 
-###### _jira_url_
+##### _jira_url_
 Your JIRA host url for exemple: `http://localhost:8080`
 
-###### _jira_user & jira_password_
+##### _jira_user & jira_password_
 Your JIRA user keys
 
-###### _test_revison_
+##### _test_revison_
 You can send your test revision (it could be your feature name for example).
 If this config is empty `001` will be sent to xray instead
  ![test_revison_example](./doc/revision.jpeg)
  
  
-###### _testEnvironments_
+##### _testEnvironments_
 Test environnement that will be set on `Test Environnements` field in `Test Execution` issue
  ![testEnvironments_example](./doc/testEnvironnements.jpeg)
 
-###### _debug_
+##### _debug_
  to turn on the debug mode for the helper
 ###### Example:
 when debug is `true`
@@ -71,10 +71,10 @@ Feature files have to be exported from an `Test Execution` issue.
 
 
 ## Screenshot on xray side
-`On failure`
+### `On failure`
 
 ![Failed tests](./doc/result-ko.jpeg)
 
-`On success`
+### `On success`
 ![Succeeded tests](./doc/result-ok.jpeg)
 
