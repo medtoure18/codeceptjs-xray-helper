@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "quality-code-check": "./node_modules/.bin/eslint .",
+    "quality-code-fix": "./node_modules/.bin/eslint . --fix"
+  },
+  "pre-push": [
+    "quality-code-check"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "eslint": "^7.2.0",
+    "pre-push": "^0.1.1"
+  },
+  "dependencies": {
+    "jsesc": "^2.5.2",
+    "moment": "^2.24.0",
+    "request": "^2.88.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.hipay.org/QA/nr-stage.git"
+  },
+  "author": "mtoure18",
+  "license": "ISC",
+  "name": "codeceptjs-xray-helper",
+  "version": "1.0.0"
+}
