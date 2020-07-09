@@ -9,7 +9,12 @@
     "url": "https://github.com/medtoure18/codeceptjs-xray-helper.git"
   },
   "author": "mtoure18",
+  "keywords": [
+    "codeceptjs",
+    "xray",
+    "report"
+  ],
   "license": "MIT",
   "name": "codeceptjs-xray-helper",
-  "version": "1.0.0"
+  "version": "1.0.2"
 }
