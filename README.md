@@ -43,12 +43,12 @@ Your JIRA user keys
 ##### _test_revison_
 You can send your test revision (it could be your feature name for example).
 If this config is empty `001` will be sent to xray instead
- ![test_revison_example](./doc/revision.jpeg)
+ ![test_revison_example](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/revision.jpeg)
  
  
 ##### _testEnvironments_
 Test environnement that will be set on `Test Environnements` field in `Test Execution` issue
- ![testEnvironments_example](./doc/testEnvironnements.jpeg)
+ ![testEnvironments_example](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/testEnvironnements.jpeg)
 
 ##### _debug_
  to turn on the debug mode for the helper
@@ -67,14 +67,14 @@ mtoure@E5450:~/workspace/demo-xray-bdd(master)$
 
 ## Export features files on Xray side
 Feature files have to be exported from an `Test Execution` issue.
-![Failed tests](./doc/export-execution.jpeg)
+![Failed tests](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/export-execution.jpeg)
 
 
 ## Screenshot on xray side
 ### `On failure`
 
-![Failed tests](./doc/result-ko.jpeg)
+![Failed tests](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/result-ko.jpeg)
 
 ### `On success`
-![Succeeded tests](./doc/result-ok.jpeg)
+![Succeeded tests](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/result-ok.jpeg)
 
