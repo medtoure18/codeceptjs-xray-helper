@@ -22,7 +22,7 @@
     "url": "https://gitlab.hipay.org/QA/nr-stage.git"
   },
   "author": "mtoure18",
-  "license": "ISC",
+  "license": "MIT",
   "name": "codeceptjs-xray-helper",
   "version": "1.0.0"
 }
