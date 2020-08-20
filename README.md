@@ -26,7 +26,8 @@ Example:
        jira_user: 'root',
        jira_password: 'root',
        test_revison: '001',
-       testEnvironments: '["browser:chrome", "linux"]'
+       testEnvironments: '["browser:chrome", "linux"]',
+       testsExportedFromTestExecution:false
     }
   ...
 }
@@ -52,6 +53,11 @@ Test environnement that will be set on `Test Environnements` field in `Test Exec
 
 ##### _debug_
  to turn on the debug mode for the helper
+ 
+##### _testsExportedFromTestExecution_
+_not mandatory_, set to `true` if you have exported your cumcumber files from `Test Plan` or `Test Set`: 
+New `Test Execution` will be generated
+ 
 ###### Example:
 when debug is `true`
 
