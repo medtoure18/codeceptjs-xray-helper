@@ -57,6 +57,12 @@ Test environnement that will be set on `Test Environnements` field in `Test Exec
 ##### _testsExportedFromTestExecution_
 _not mandatory_, set to `true` if you have exported your cumcumber files from `Test Plan` or `Test Set`: 
 New `Test Execution` will be generated
+
+##### _timeOut_
+ _not mandatory_, set the timeOut in MS of the request to jira api `default 1200`
+ 
+##### _proxy_
+  _not mandatory_, set the proxy if you need a proxy to reach your jira instance example: `proxy:"http://xxx.xx.xx.00:3128"` 
  
 ###### Example:
 when debug is `true`
