@@ -39,13 +39,19 @@ module.exports = function (config) {
                 if (executedTest.tags[1].split("@")[1] == test.tags[1].split("@")[1]) {
                     //we add the first test result status in exemples array
                     if (executedTest.examples.length == 0) {
-                        if (executedTest.state == "passed") executedTest.examples.push("PASSED");
-                        else executedTest.examples.push("FAILED");
+                        if (executedTest.state == "passed") {
+                            if(config.xray_cloud) executedTest.examples.push("PASSED"); else executedTest.examples.push("PASS");
+                        } else {
+                            if(config.xray_cloud) executedTest.examples.push("FAILED"); else executedTest.examples.push("FAIL");
+                        }
                     }
                     //we add the actual test result status in exemples array
-                    if (test.state == "passed") executedTest.examples.push("PASSED")
+                    if (test.state == "passed") {
+                        if(config.xray_cloud) executedTest.examples.push("PASSED"); else executedTest.examples.push("PASS");
+                    }
                     else {
-                        executedTest.examples.push("FAILED");
+                        if(config.xray_cloud) executedTest.examples.push("FAILED"); else executedTest.examples.push("FAIL");
+                        
                         executedTest.comment = jsesc(test.err.toString().replace(/\"/g, "").replace(/\'/g, "").replace(/\é/g, "e").replace(/\è/g, "e").replace(/\ê/g, "e").replace(/\à/g, "a").replace(/\ù/g, "u"));
                     }
                     testContainsExemples = true;
@@ -54,13 +60,19 @@ module.exports = function (config) {
                 if (executedTest.tags[2].split("@")[1] == test.tags[2].split("@")[1]) {
                     //we add the first test result status in exemples array
                     if (executedTest.examples.length == 0) {
-                        if (executedTest.state == "passed") executedTest.examples.push("PASSED")
-                        else executedTest.examples.push("FAILED")
+                        if (executedTest.state == "passed") {
+                            if(config.xray_cloud) executedTest.examples.push("PASSED"); else executedTest.examples.push("PASS");
+                        }
+                        else {
+                            if(config.xray_cloud) executedTest.examples.push("FAILED"); else executedTest.examples.push("FAIL");
+                        }
                     }
                     //we add the actual test result status in exemples array
-                    if (test.state == "passed") executedTest.examples.push("PASSED")
+                    if (test.state == "passed") {
+                        if(config.xray_cloud) executedTest.examples.push("PASSED"); else executedTest.examples.push("PASS");
+                    }
                     else {
-                        executedTest.examples.push("FAILED");
+                        if(config.xray_cloud) executedTest.examples.push("FAILED"); else executedTest.examples.push("FAIL");
                         executedTest.comment = jsesc(test.err.toString().replace(/\"/g, "").replace(/\'/g, "").replace(/\é/g, "e").replace(/\è/g, "e").replace(/\ê/g, "e").replace(/\à/g, "a").replace(/\ù/g, "u"));
                     }
                     testContainsExemples = true;
@@ -97,8 +109,12 @@ module.exports = function (config) {
                 if (i == 0) {
                     tests = '"tests" : [';
                     // if this is the first test that is added to the list of tests executed.
-                    tests = tests + "" + '{"testKey":"' + test.tags[1].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
-                } else tests = tests + "" + ',{"testKey":"' + test.tags[1].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                    if (config.xray_cloud) tests = tests + "" + '{"testKey":"' + test.tags[1].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                    else tests = tests + "" + '{"testKey":"' + test.tags[1].split("@")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                } else {
+                    if (config.xray_cloud) tests = tests + "" + ',{"testKey":"' + test.tags[1].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                    else tests = tests + "" + ',{"testKey":"' + test.tags[1].split("@")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                } 
                 i = i + 1;
             });
         } else {
@@ -108,14 +124,18 @@ module.exports = function (config) {
                 if (i == 0) {
                     tests = '"tests" : [';
                     // if this is the first test that is added to the list of tests executed.
-                    tests = tests + "" + '{"testKey":"' + test.tags[2].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
-                } else tests = tests + "" + ',{"testKey":"' + test.tags[2].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                    if (config.xray_cloud) tests = tests + "" + '{"testKey":"' + test.tags[2].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                    else tests = tests + "" + '{"testKey":"' + test.tags[2].split("@")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                } else {
+                    if (config.xray_cloud) tests = tests + "" + ',{"testKey":"' + test.tags[2].split("@TEST_")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                    else tests = tests + "" + ',{"testKey":"' + test.tags[2].split("@")[1] + '","status":"' + test.state + '", "examples":' + JSON.stringify(test.examples) + ',"comment" : "' + test.comment + '" }';
+                }
                 i = i + 1;
             });
         }
 
         if (config.debug) console.log("SEND TO XRAY=>" + info + tests + "]}");
-        
+
         // we send the file to xray api
         recorder.add('Sending new result to xray', function () {
             new Promise((doneFn, errFn) => {
@@ -145,8 +165,8 @@ module.exports = function (config) {
                             request({
                                 url: config.xray_cloudUrl + '/api/v2/import/execution',
                                 headers: {
-                                    "content-type": "application/json",
-                                    "authorization": "Bearer " + token
+                                    'content-type': 'application/json',
+                                    'authorization': 'Bearer ' + body
                                 },
                                 method: 'POST',
                                 proxy: config.proxy,
@@ -161,7 +181,6 @@ module.exports = function (config) {
                                     if (config.debug) {
                                         console.log("XRAY RESPONSE=>" + body);
                                     }
-                                    //output.print("Tests results sended to XRAY on TestExecution: " + (JSON.parse(body)).testExecIssue.key);
                                 } else {
                                     if (config.debug) console.log(error);
                                     output.print(error);
