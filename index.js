@@ -5,8 +5,9 @@ const moment = require('moment');
 const request = require('request');
 const jsesc = require('jsesc');
 const fs = require('fs');
-require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
+const axios = require('axios').default;
 
+require('tls').DEFAULT_MIN_VERSION = 'TLSv1';
 
 const defaultConfig = {
     debug: false,
@@ -21,12 +22,14 @@ const defaultConfig = {
     xray_cloudUrl: 'https://xray.cloud.getxray.app',
     xray_cloud: true,
     xray_clientId: '',
-    xray_clientSecret: '' 
+    xray_clientSecret: '',
+    xray_token: ''
 };
+
 var info = "";
 var tests = "";
-var token = "";
 var testsResults = [];
+
 module.exports = function (config) {
     var config = Object.assign(defaultConfig, config);
     //we get test results after each test
@@ -85,7 +88,6 @@ module.exports = function (config) {
         if (!testContainsExemples) testsResults.push(test);
     });
 
-
     /* at the end of all the tests we complete the json and send it to xray by api*/
     event.dispatcher.on(event.all.after, function (suite) {
         //we change test state syntax to meet xray requirement
@@ -134,87 +136,75 @@ module.exports = function (config) {
             });
         }
 
-        if (config.debug) console.log("SEND TO XRAY=>" + info + tests + "]}");
+        if (config.debug) console.log("SEND TO XRAY => " + info + tests + "]}");
 
         // we send the file to xray api
         recorder.add('Sending new result to xray', function () {
             new Promise((doneFn, errFn) => {
                 if(config.xray_cloud == true) {
-                    request({
+                    axios({
+                        method: 'post',
                         url: config.xray_cloudUrl + '/api/v2/authenticate',
                         headers: {
-                            "content-type": "application/json",
+                            'content-type': 'application/json'
                         },
-                        method: 'POST',
-                        proxy: config.proxy,
                         timeout: config.timeOut,
-                        json: true,
-                        body: {
-                            "client_id": config.xray_clientId,
-                            "client_secret": config.xray_clientSecret
+                        proxy: config.proxy,
+                        data: {
+                            client_id: config.xray_clientId,
+                            client_secret: config.xray_clientSecret
                         }
-                    },
-                    function (error, response, body) {
-                        if (!error) {
-                            token = body;
+                      }).then(function (response) {
+                          if (config.debug) console.log("XRAY RESPONSE => " + response.data);
+                          
+                          config.xray_token = response.data;
 
-                            if (config.debug) console.log("XRAY RESPONSE=>" + body);
+                          output.print("Access token generate successfully!");
 
-                            output.print("Access token generate successfully!");
-
-                            request({
-                                url: config.xray_cloudUrl + '/api/v2/import/execution',
-                                headers: {
-                                    'content-type': 'application/json',
-                                    'authorization': 'Bearer ' + body
-                                },
-                                method: 'POST',
-                                proxy: config.proxy,
-                                timeout: config.timeOut,
-                                json: true,
-                                body: {
-                                    body: info + tests + "]}"
-                                }
+                          axios({
+                            method: 'post',
+                            url: config.xray_cloudUrl + '/api/v2/import/execution',
+                            headers: {
+                                'content-type': 'application/json',
+                                'Authorization': 'Bearer ' + config.xray_token
                             },
-                            function (error, response, body) {
-                                if (!error) {
-                                    if (config.debug) {
-                                        console.log("XRAY RESPONSE=>" + body);
-                                    }
-                                } else {
-                                    if (config.debug) console.log(error);
-                                    output.print(error);
-                                    output.print("Error while sending results to XRAY");
-                                }
-                            });
-                        } else {
-                            if (config.debug) console.log(error);
-                            output.print(error);
-                            output.print("Error while generating the access token");
-                        }
-                    });
-                } else if (config.xray_cloud == false) {
-                    request({
-                        url: config.jira_url + "/rest/raven/1.0/import/execution",
+                            timeout: config.timeOut,
+                            proxy: config.proxy,
+                            responseType: 'json',
+                            data: info + tests + ']}'
+                          }).then(function (response) {
+                              if (config.debug) console.log("XRAY RESPONSE => " + JSON.stringify(response.data));
+    
+                              output.print("Test Execution updated successfully!");
+                          }).catch(function (error) {
+                            console.log(error);
+                          });
+                      }).catch(function (error) {
+                        console.log(error);
+                      });
+                } 
+                else if (config.xray_cloud == false) {
+                    axios({
+                        method: 'post',
+                        url: config.jira_url + '/rest/raven/1.0/import/execution',
                         headers: {
-                            "content-type": "application/json",
+                            'content-type': 'application/json',
                             'Authorization': 'Basic ' + Buffer.from(config.jira_user + ':' + config.jira_password).toString('base64')
                         },
-                        method: 'POST',
-                        proxy: config.proxy,
                         timeout: config.timeOut,
-                        body: info + tests + "]}"
-                    }, function (error, response, body) {
-                        if (!error) {
-                            if (config.debug) console.log("XRAY RESPONSE=>" + body);
-                            output.print("Tests results sended to XRAY on TestExecution: " + (JSON.parse(body)).testExecIssue.key);
-                        } else {
-                            if (config.debug) console.log(error);
-                            output.print(error);
-                            output.print("Error while sending results to XRAY");
-                        }
-                    });
-                } else {
+                        proxy: config.proxy,
+                        responseType: 'json',
+                        data: info + tests + ']}'
+                      }).then(function (response) {
+                          if (config.debug) console.log("XRAY RESPONSE => " + response);
+
+                          output.print("Tests results sended to XRAY on TestExecution: " + (JSON.parse(response)).testExecIssue.key);
+                      }).catch(function (error) {
+                        console.log(error);
+                        output.print("Error while sending results to XRAY");
+                      });
+                } 
+                else {
                     throw new Error("Value for setting 'xray_cloud' could only be 'true' or 'false'!");
                 }
             });

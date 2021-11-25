@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "axios": "^0.24.0",
     "jsesc": "^2.5.2",
     "moment": "^2.24.0",
     "request": "^2.88.0"
