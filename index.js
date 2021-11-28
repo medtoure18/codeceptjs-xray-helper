@@ -2,7 +2,6 @@ const event = require('codeceptjs').event;
 const recorder = require('codeceptjs').recorder;
 const output = require('codeceptjs').output;
 const moment = require('moment');
-const request = require('request');
 const jsesc = require('jsesc');
 const fs = require('fs');
 const axios = require('axios').default;
