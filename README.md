@@ -39,16 +39,25 @@ Example:
 Your JIRA host url for exemple: `http://localhost:8080`
 
 ##### _jira_user & jira_password_
-Your JIRA user keys
+Your JIRA user keys, only for jira server
+
+##### _xray_cloud & xray_clientId & xray_clientSecret_
+if you are in jira cloud you have to set theses options
+###### xray_cloud: true
+###### xray_clientId: XXXX
+###### xray_clientSecret: XXXX
+###### to get your cloud clientId see: https://docs.getxray.app/display/ProductKB/%5BXray+Cloud%5D+How+to+use+REST+API+with+Xray+for+Jira+Cloud
 
 ##### _test_revison_
 You can send your test revision (it could be your feature name for example).
 If this config is empty `001` will be sent to xray instead
+
  ![test_revison_example](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/revision.jpeg)
  
  
 ##### _testEnvironments_
 Test environnement that will be set on `Test Environnements` field in `Test Execution` issue
+
  ![testEnvironments_example](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/testEnvironnements.jpeg)
 
 ##### _debug_
@@ -79,6 +88,7 @@ mtoure@E5450:~/workspace/demo-xray-bdd(master)$
 
 ## Export features files on Xray side
 Feature files have to be exported from an `Test Execution` issue.
+
 ![Failed tests](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/export-execution.jpeg)
 
 
@@ -88,5 +98,6 @@ Feature files have to be exported from an `Test Execution` issue.
 ![Failed tests](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/result-ko.jpeg)
 
 ### `On success`
+
 ![Succeeded tests](https://raw.githubusercontent.com/medtoure18/codeceptjs-xray-helper/master/doc/result-ok.jpeg)
 
