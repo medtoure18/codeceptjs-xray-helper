@@ -19,7 +19,7 @@ const defaultConfig = {
     timeOut: 1200,
     proxy: '',
     xray_cloudUrl: 'https://xray.cloud.getxray.app',
-    xray_cloud: true,
+    xray_cloud: false,
     xray_clientId: '',
     xray_clientSecret: '',
     xray_token: ''
