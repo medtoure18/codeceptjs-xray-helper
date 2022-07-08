@@ -2,7 +2,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "jsesc": "^2.5.2",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "repository": {
     "type": "git",
