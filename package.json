@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^1.6.0",
     "jsesc": "^2.5.2",
     "moment": "^2.24.0"
   },
