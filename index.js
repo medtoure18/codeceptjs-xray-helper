@@ -152,5 +152,5 @@ module.exports = function (config) {
         }
       });
     });
-  };
+  });
 };
