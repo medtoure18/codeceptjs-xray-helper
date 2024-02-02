@@ -33,37 +33,42 @@ module.exports = function (config) {
 
   console.log('xrayReport plugin is loaded with config:', config);
 
-  event.dispatcher.on(event.test.after, function (test) {
-    console.log('Test execution completed:', test.title);
-    let testContainsExamples = false;
-    test.examples = [];
+ event.dispatcher.on(event.test.after, function (test) {
+  console.log('Test execution completed:', test.title);
+  let testContainsExamples = false;
+  test.examples = [];
 
     testsResults.forEach(executedTest => {
-      const testKeyMatched = !config.testsExportedFromTestExecution
-        ? executedTest.tags && test.tags && executedTest.tags[1].split("@")[1] === test.tags[1].split("@")[1]
-        : executedTest.tags[2].split("@")[1] === test.tags[2].split("@")[1];
+    const testKeyMatched = !config.testsExportedFromTestExecution &&
+        executedTest.tags &&
+        test.tags &&
+        executedTest.tags[1] &&
+        test.tags[1] &&
+        executedTest.tags[2] &&
+        test.tags[2] &&
+        executedTest.tags[1].split("@")[1] === test.tags[1].split("@")[1];
 
-      if (testKeyMatched) {
+    if (testKeyMatched) {
         if (executedTest.examples.length === 0) {
-          const status = executedTest.state === "passed" ? (config.xray_cloud ? "PASSED" : "PASS") : (config.xray_cloud ? "FAILED" : "FAIL");
-          executedTest.examples.push(status);
+        const status = executedTest.state === "passed" ? (config.xray_cloud ? "PASSED" : "PASS") : (config.xray_cloud ? "FAILED" : "FAIL");
+        executedTest.examples.push(status);
         }
 
         const status = test.state === "passed" ? (config.xray_cloud ? "PASSED" : "PASS") : (config.xray_cloud ? "FAILED" : "FAIL");
         executedTest.examples.push(status);
 
         if (test.state !== "passed") {
-          executedTest.comment = jsesc(test.err.toString().replace(/["'éèêàù]/g, char => char.normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+        executedTest.comment = jsesc(test.err.toString().replace(/["'éèêàù]/g, char => char.normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
         }
 
         testContainsExamples = true;
-      }
+    }
     });
 
     if (!testContainsExamples) {
-      testsResults.push(test);
+    testsResults.push(test);
     }
-  });
+});
 
   event.dispatcher.on(event.all.after, function () {
     testsResults.forEach(test => {
