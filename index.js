@@ -76,18 +76,21 @@ module.exports = function (config) {
       test.comment = test.state === 'PASSED' ? "Successful execution" : jsesc(test.err.toString().replace(/["'éèêàù]/g, char => char.normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
       console.log("examples:" + JSON.stringify(test.examples));
 
-      // Check if test.examples is defined before trying to access properties
-      if (test.examples && test.examples.length > 0) {
-        test.examples.forEach(example => {
-          // Check if the property you are trying to access is defined before calling split
-          const exampleStatus = example.state === "passed" ? (config.xray_cloud ? "PASSED" : "PASS") : (config.xray_cloud ? "FAILED" : "FAIL");
-          example.examples.push(exampleStatus);
+        if (test.examples && test.examples.length > 0) {
+            test.examples.forEach(example => {
+                // Check if the property 'examples' is defined before calling push
+                if (!example.examples) {
+                    example.examples = [];
+                }
 
-          if (example.state !== "passed") {
-            example.comment = jsesc(example.err.toString().replace(/["'éèêàù]/g, char => char.normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
-          }
-        });
-      }
+                const exampleStatus = example.state === "passed" ? (config.xray_cloud ? "PASSED" : "PASS") : (config.xray_cloud ? "FAILED" : "FAIL");
+                example.examples.push(exampleStatus);
+
+                if (example.state !== "passed") {
+                    example.comment = jsesc(example.err.toString().replace(/["'éèêàù]/g, char => char.normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+                }
+            });
+        }
     });
 
     if (!config.testsExportedFromTestExecution) {
